@@ -9,11 +9,13 @@ public class RTSController : MonoBehaviour
 
     private Vector3 startPosition;
     private List<Survivor> selectedSurvivors;
+    private Vector3 movePosition;
 
     private void Awake() 
     {
         selectedSurvivors = new List<Survivor>();
         selectionAreaTransform.gameObject.SetActive(false);
+        movePosition = new Vector3(0, 0, 0);
     }
 
     // Update is called once per frame
@@ -71,7 +73,20 @@ public class RTSController : MonoBehaviour
                 }
             }
 
-            Debug.Log($"Survivors selected: {selectedSurvivors.Count}");
+            // Debug.Log($"Survivors selected: {selectedSurvivors.Count}");
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            movePosition = UtilsClass.GetMouseWorldPosition();
+        }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            foreach (Survivor survivor in selectedSurvivors)
+            {
+                survivor.GetComponent<SurvivorMovementPathfinding>().SetMovePosition(movePosition);
+            }
         }
     }
 }
