@@ -12,31 +12,32 @@ public class Pathfinding : MonoBehaviour
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
 
-    private void Start() 
-    {
-        //FindPath(new int2(0, 0), new int2(3, 1));
-        FunctionPeriodic.Create(() => {
-            float startTime = Time.realtimeSinceStartup;
+    // Test logic
+    // private void Start() 
+    // {
+    //     //FindPath(new int2(0, 0), new int2(3, 1));
+    //     FunctionPeriodic.Create(() => {
+    //         float startTime = Time.realtimeSinceStartup;
 
-            int findPathJobCount = 5;
-            NativeArray<JobHandle> jobHandleArray = new NativeArray<JobHandle>(findPathJobCount, Allocator.TempJob);
+    //         int findPathJobCount = 5;
+    //         NativeArray<JobHandle> jobHandleArray = new NativeArray<JobHandle>(findPathJobCount, Allocator.TempJob);
 
-            for (int i = 0; i < findPathJobCount; i++)
-            {
-                FindPathJob findPathJob = new FindPathJob
-                {
-                    startPosition = new int2(0, 0),
-                    endPosition = new int2(19, 19)
-                };
-                jobHandleArray[i] = findPathJob.Schedule();
-            }
+    //         for (int i = 0; i < findPathJobCount; i++)
+    //         {
+    //             FindPathJob findPathJob = new FindPathJob
+    //             {
+    //                 startPosition = new int2(0, 0),
+    //                 endPosition = new int2(19, 19)
+    //             };
+    //             jobHandleArray[i] = findPathJob.Schedule();
+    //         }
 
-            JobHandle.CompleteAll(jobHandleArray);
-            jobHandleArray.Dispose();
+    //         JobHandle.CompleteAll(jobHandleArray);
+    //         jobHandleArray.Dispose();
 
-            Debug.Log($"Time: {(Time.realtimeSinceStartup - startTime) * 1000f}");
-        }, 1f);
-    }
+    //         Debug.Log($"Time: {(Time.realtimeSinceStartup - startTime) * 1000f}");
+    //     }, 1f);
+    // }
 
     [BurstCompile]
     private struct FindPathJob : IJob {
