@@ -89,7 +89,7 @@ public class RTSController : MonoBehaviour
 
             foreach (Survivor survivor in selectedSurvivors)
             {
-                survivor.GetComponent<IMovePosition>().SetMovePosition(targetPostionList[targetPostionListIndex]);
+                survivor.MoveToPosition(targetPostionList[targetPostionListIndex]);
                 targetPostionListIndex = (targetPostionListIndex + 1) % targetPostionList.Count;
             }
         }

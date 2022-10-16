@@ -24,7 +24,7 @@ public class SurvivorMovementDirect : MonoBehaviour, IMovePosition
             moveDir = Vector3.zero;     // Stop moving when close to move position
 
         body.velocity = moveDir * moveSpeed;
-        Debug.Log(moveDir);
+        //Debug.Log(moveDir);
     }
 
     public void SetMovePosition(Vector3 movePosition)

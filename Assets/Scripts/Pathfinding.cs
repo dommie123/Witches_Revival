@@ -12,6 +12,25 @@ public class Pathfinding : MonoBehaviour
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
 
+    private NativeList<int2> currentPath;
+
+    public NativeList<int2> FindPath(int2 startPosition, int2 endPosition, int2 gridSize)
+    {
+        FindPathJob findPathJob = new FindPathJob 
+        {
+            startPosition = startPosition, 
+            endPosition = endPosition,
+            gridSize = gridSize,
+            curPath = currentPath
+        };
+
+        JobHandle jobHandle = findPathJob.Schedule();
+        jobHandle.Complete();
+
+        findPathJob.curPath.Dispose();
+        return currentPath;
+    }
+
     // Test logic
     // private void Start() 
     // {
@@ -38,18 +57,33 @@ public class Pathfinding : MonoBehaviour
     //         Debug.Log($"Time: {(Time.realtimeSinceStartup - startTime) * 1000f}");
     //     }, 1f);
     // }
+    public static bool ColliderExistsAt(int x, int y)
+    {
+        // TODO determine whether there is a collider at the given coordinates
+        return false;
+    }
+
+    private void OnDestroy() 
+    {
+        // Cleanup code here
+        currentPath.Dispose();
+    }
 
     [BurstCompile]
     private struct FindPathJob : IJob {
 
         public int2 startPosition;
         public int2 endPosition;
+        public int2 gridSize;
+
+        public NativeList<int2> curPath;
 
         public void Execute()
         {
-            int2 gridSize = new int2(20, 20);
+            // int2 gridSize = new int2(20, 20);
 
             // Grid creation algorithm
+            curPath = new NativeList<int2>(gridSize.x * gridSize.y, Allocator.Temp);
             NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridSize.x * gridSize.y, Allocator.Temp);
 
             for (int x = 0; x < gridSize.x; x++)
@@ -66,7 +100,7 @@ public class Pathfinding : MonoBehaviour
                     pathNode.hCost = CalculateDistanceCost(new int2(x, y), endPosition);
                     pathNode.CalculateFCost();
 
-                    pathNode.isWalkable = true;
+                    pathNode.isWalkable = ColliderExistsAt(pathNode.x, pathNode.y);
                     pathNode.cameFromNodeIndex = -1;
 
                     pathNodeArray[pathNode.index] = pathNode;
@@ -197,6 +231,7 @@ public class Pathfinding : MonoBehaviour
             {
                 // We found a path!
                 NativeList<int2> path = CalculatePath(pathNodeArray, endNode);
+                curPath = path;
                 // foreach(int2 pathPos in path)
                 // {
                 //     Debug.Log(pathPos);
@@ -298,5 +333,5 @@ public class Pathfinding : MonoBehaviour
                 this.isWalkable = isWalkable;
             }
         }
-    }
+    };
 }

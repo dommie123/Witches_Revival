@@ -16,4 +16,9 @@ public class Survivor : MonoBehaviour
     {
         selectedGameObject.SetActive(visible);
     }
+
+    public void MoveToPosition(Vector3 movePosition)
+    {
+        GetComponent<IMovePosition>().SetMovePosition(movePosition);
+    }
 }
