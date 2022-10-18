@@ -151,6 +151,8 @@ public class Witch : MonoBehaviour
     {
         if (other.gameObject.tag == "Wall")
             isTouchingWall = true;
+        else if (other.gameObject.tag == "Player")
+            GameManager.instance.LoseGame();
     }
 }
 

@@ -55,7 +55,7 @@ public class Ghost : MonoBehaviour
             currentWaypoint = (lineOfSight.GetDirectionAsVector3() * patrolRange) + transform.position;
         }
 
-        Debug.Log(currentWaypoint);
+        // Debug.Log(currentWaypoint);
         movePosition.SetMovePosition(currentWaypoint);
     }
 
@@ -82,7 +82,7 @@ public class Ghost : MonoBehaviour
 
     private bool IsNearPosition(Vector3 position)
     {
-        Debug.Log(Vector3.Distance(transform.position, position));
+        // Debug.Log(Vector3.Distance(transform.position, position));
         return Vector3.Distance(transform.position, position) < 2.5f;
     }
 
