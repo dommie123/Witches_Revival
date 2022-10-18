@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Collections;
 
-public class SurvivorMovementPathfinding : MonoBehaviour, IMovePosition
+public class UnitMovementPathfinding : MonoBehaviour, IMovePosition
 {
     [SerializeField] private float moveSpeed;
 

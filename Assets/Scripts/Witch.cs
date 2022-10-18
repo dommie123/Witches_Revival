@@ -41,9 +41,9 @@ public class Witch : MonoBehaviour
         UpdateDirection();
     }
 
-    public void SetLastKnownPosition(Vector3 position)
+    public void AlertToPlayerPosition(Vector3 playerPos)
     {
-        lastKnownPosition = position;
+        lastKnownPosition = playerPos;
         patrolState = PatrolState.Chasing;
     }
 
@@ -59,7 +59,6 @@ public class Witch : MonoBehaviour
 
                 if (IsNearPosition(lastKnownPosition))
                 {
-                    // lastKnownPosition = null;
                     patrolState = PatrolState.Patrolling;
                 }
             }
@@ -68,18 +67,14 @@ public class Witch : MonoBehaviour
                 PatrolArea();
             }
 
-            return;
+        }
+        else
+        {
+            patrolState = PatrolState.Chasing;
+            lastKnownPosition = objects[objects.Count - 1].transform.position;
+            movePosition.SetMovePosition(lastKnownPosition);
         }
 
-        patrolState = PatrolState.Chasing;
-        foreach (GameObject obj in objects)
-        {
-            // Debug.Log(obj);
-            if (lastKnownPosition == null)
-            {
-                lastKnownPosition = obj.transform.position;
-            }
-        }
     }
 
     private void UpdateDirection()
@@ -114,14 +109,14 @@ public class Witch : MonoBehaviour
             ? transform.position
             : lastKnownPosition;
 
-        
         if (IsNearPosition(currentWaypoint) || isTouchingWall)
         {
             isTouchingWall = false;
             SetRandomDirection();
-            currentWaypoint = lineOfSight.GetDirectionAsVector3() * patrolRange;
+            currentWaypoint = (lineOfSight.GetDirectionAsVector3() * patrolRange) + transform.position;
         }
 
+        // Debug.Log(currentWaypoint);
         movePosition.SetMovePosition(currentWaypoint);
     }
 
@@ -148,7 +143,7 @@ public class Witch : MonoBehaviour
 
     private bool IsNearPosition(Vector3 position)
     {
-        Debug.Log(Vector3.Distance(transform.position, position));
+        // Debug.Log(Vector3.Distance(transform.position, position));
         return Vector3.Distance(transform.position, position) < 2.5f;
     }
 

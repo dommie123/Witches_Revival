@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SurvivorMovementDirect : MonoBehaviour, IMovePosition
+public class UnitMovementDirect : MonoBehaviour, IMovePosition
 {
     [SerializeField] private float moveSpeed;
 
@@ -18,7 +18,7 @@ public class SurvivorMovementDirect : MonoBehaviour, IMovePosition
     // Update is called once per frame
     void Update()
     {
-        Vector3 moveDir = Vector3.Normalize(movePosition - transform.position);
+        Vector3 moveDir = (movePosition - transform.position).normalized;
 
         if (Vector3.Distance(movePosition, transform.position) < 1f)
             moveDir = Vector3.zero;     // Stop moving when close to move position
