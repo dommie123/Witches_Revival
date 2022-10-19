@@ -8,19 +8,19 @@ public class Portal : MonoBehaviour
 
     [SerializeField] private int sourceIndex;
     [SerializeField] private int targetIndex;
-    [SerializeField] private LayerMask entityMask;
     
-    [SerializeField] public bool PlayerIsExiting {get; set;}
+    public bool PlayerIsExiting {get; set;}
 
     private void Awake() 
     {
         portals = Object.FindObjectsOfType<Portal>();
+        PlayerIsExiting = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other) 
     {
-        if (other.gameObject.layer != 3)
-            return;
+        // if (other.gameObject.layer != entityMask)
+        //     return;
         
         if (PlayerIsExiting)
             return;

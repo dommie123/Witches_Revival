@@ -9,11 +9,13 @@ public class RTSController : MonoBehaviour
 
     private Vector3 startPosition;
     private List<Survivor> selectedSurvivors;
+    private List<HidingSpot> selectedHidingSpots;
     private Vector3 movePosition;
 
     private void Awake() 
     {
         selectedSurvivors = new List<Survivor>();
+        selectedHidingSpots = new List<HidingSpot>();
         selectionAreaTransform.gameObject.SetActive(false);
         // movePosition = new Vector3(0, 0, 0);
     }
@@ -59,17 +61,29 @@ public class RTSController : MonoBehaviour
             {
                 survivor.SetSelectedVisible(false);
             }
+            foreach (HidingSpot hidingSpot in selectedHidingSpots)
+            {
+                hidingSpot.SetSelected(false);
+            }
 
             selectedSurvivors.Clear();
+            selectedHidingSpots.Clear();
 
             // Select all units within selection area
             foreach (Collider2D collider in colliderArray)
             {
                 Survivor survivor = collider.GetComponent<Survivor>();
+                HidingSpot hidingSpot = collider.GetComponent<HidingSpot>();
+
                 if (survivor != null)
                 {
                     survivor.SetSelectedVisible(true);
                     selectedSurvivors.Add(survivor);
+                }
+                else if (hidingSpot != null)
+                {
+                    hidingSpot.SetSelected(true);
+                    selectedHidingSpots.Add(hidingSpot);
                 }
             }
 
