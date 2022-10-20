@@ -5,10 +5,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+
     private List<Survivor> survivors;
 
     public List<Survivor> escapedSurvivors;
-
+    
     private void Awake()
     {
         instance = this;
