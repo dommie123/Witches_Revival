@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
+using TMPro;
 
 public class OptionsManager : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class OptionsManager : MonoBehaviour
         screenBrightness = 1f;
         gameVolume = 1f;
         isFullScreen = true;
+        screenResolution = new int2(1366, 768);
+
+        SetGameResolution(screenResolution);
 
         if (instance != null)
         {
@@ -39,7 +43,6 @@ public class OptionsManager : MonoBehaviour
             AudioListener.volume = gameVolume;
         if (Screen.brightness != screenBrightness)
             Screen.brightness = screenBrightness;
-        
     }
 
     public void SetGameVolume(float volume)
@@ -52,6 +55,16 @@ public class OptionsManager : MonoBehaviour
         screenBrightness = brightness;
     }
 
+    public void SetGameResolution(TMP_Dropdown change)
+    {
+        int width = int.Parse(change.captionText.text.Split("x")[0].Trim());
+        int height = int.Parse(change.captionText.text.Split("x")[1].Trim());
+
+        int2 newResolution = new int2(width, height);
+        SetGameResolution(newResolution);
+    }
+
+    // Test the following functions in the build. They do not work in the editor.
     public void SetGameResolution(int2 resolution)
     {
         screenResolution = resolution;
