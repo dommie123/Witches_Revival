@@ -1,20 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    [SerializeField] private float jumpscareCooldown;
+    [SerializeField] private string mainLevel;
     private List<Survivor> survivors;
+    private bool losingSequenceActive;
 
     public List<Survivor> escapedSurvivors;
+    public GameObject jumpscarePanel;
+    public GameObject gameOverPanel;
+    public GameObject hud;
     
     private void Awake()
     {
         instance = this;
         survivors = new List<Survivor>();
         escapedSurvivors = new List<Survivor>();
+        losingSequenceActive = false;
 
         Survivor[] survivorsArr = Object.FindObjectsOfType<Survivor>();
         foreach (Survivor survivor in survivorsArr)
@@ -67,11 +75,48 @@ public class GameManager : MonoBehaviour
 
     public void LoseGame()
     {
-        Debug.Log("Game Over!");
+        // Debug.Log("Game Over!");
+        // Disable hud, enable jumpscare
+        if (!losingSequenceActive)
+        {
+            hud.SetActive(false);
+            jumpscarePanel.SetActive(true);
+            losingSequenceActive = true;
+            // TODO play scream sound here
+            return;
+        }
+
+        // This check prevents the jumpscare panel from looping over and over.
+        if (gameOverPanel.activeSelf)
+        {
+            return;
+        }
+
+        // After a few seconds, disable jumpscare and enable game over panel
+        if (jumpscareCooldown <= 0f)
+        {
+            jumpscarePanel.SetActive(false);
+            gameOverPanel.SetActive(true);
+        }
+        else
+        {
+            jumpscareCooldown -= Time.deltaTime;
+        }
+
     }
 
     public void QueueEscapedSurvivor(Survivor survivor)
     {
         escapedSurvivors.Add(survivor);
+    }
+
+    public void ExitToTitleScreen()
+    {
+        SceneManager.LoadScene("Main Menu");
+    }
+
+    public void RetryGame()
+    {
+        SceneManager.LoadScene(mainLevel);
     }
 }
