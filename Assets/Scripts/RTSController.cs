@@ -6,17 +6,23 @@ using CodeMonkey.Utils;
 public class RTSController : MonoBehaviour
 {
     [SerializeField] private Transform selectionAreaTransform;
+    [SerializeField] private Camera cam;
+    [SerializeField] private float zoomSensitivity;
 
     private Vector3 startPosition;
     private List<Survivor> selectedSurvivors;
     private List<HidingSpot> selectedHidingSpots;
     private Vector3 movePosition;
+    private float minCameraZoom;
+    private float maxCameraZoom;
 
     private void Awake() 
     {
         selectedSurvivors = new List<Survivor>();
         selectedHidingSpots = new List<HidingSpot>();
         selectionAreaTransform.gameObject.SetActive(false);
+        minCameraZoom = 100f;
+        maxCameraZoom = 5f;
         // movePosition = new Vector3(0, 0, 0);
     }
 
@@ -106,6 +112,12 @@ public class RTSController : MonoBehaviour
                 survivor.MoveToPosition(targetPostionList[targetPostionListIndex]);
                 targetPostionListIndex = (targetPostionListIndex + 1) % targetPostionList.Count;
             }
+        }
+
+        float zoomChange = Input.GetAxis("Mouse ScrollWheel") * zoomSensitivity;
+        if ((cam.orthographicSize <= minCameraZoom && zoomChange < 0) || (cam.orthographicSize > maxCameraZoom && zoomChange > 0))
+        {
+            cam.orthographicSize -= (Input.GetAxis("Mouse ScrollWheel") * zoomSensitivity);
         }
     }
 
