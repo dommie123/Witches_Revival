@@ -11,11 +11,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private string mainLevel;
     private List<Survivor> survivors;
     private bool losingSequenceActive;
+    private bool winningSequenceActive;
 
     public List<Survivor> escapedSurvivors;
     public GameObject jumpscarePanel;
     public GameObject gameOverPanel;
     public GameObject hud;
+    public GameObject winPanel;
     
     private void Awake()
     {
@@ -23,6 +25,7 @@ public class GameManager : MonoBehaviour
         survivors = new List<Survivor>();
         escapedSurvivors = new List<Survivor>();
         losingSequenceActive = false;
+        winningSequenceActive = false;
 
         Survivor[] survivorsArr = Object.FindObjectsOfType<Survivor>();
         foreach (Survivor survivor in survivorsArr)
@@ -70,7 +73,14 @@ public class GameManager : MonoBehaviour
 
     public void WinGame()
     {
-        Debug.Log("I won!");
+        // Debug.Log("I won!");
+        if (!winningSequenceActive)
+        {
+            hud.SetActive(false);
+            winPanel.SetActive(true);
+            winningSequenceActive = true;
+            return;
+        }
     }  
 
     public void LoseGame()
