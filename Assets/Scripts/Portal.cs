@@ -5,6 +5,7 @@ using UnityEngine;
 public class Portal : MonoBehaviour
 {
     private Portal[] portals;
+    private AudioSource portalWoosh;
 
     [SerializeField] private int sourceIndex;
     [SerializeField] private int targetIndex;
@@ -14,6 +15,7 @@ public class Portal : MonoBehaviour
     private void Awake() 
     {
         portals = Object.FindObjectsOfType<Portal>();
+        portalWoosh = GetComponent<AudioSource>();
         PlayerIsExiting = false;
     }
 
@@ -39,6 +41,7 @@ public class Portal : MonoBehaviour
         if (exitPortal == null)
             return;
         
+        portalWoosh.Play();
         exitPortal.PlayerIsExiting = true;
         other.transform.position = exitPortal.transform.position;   // Teleport entity to portal's position
     }

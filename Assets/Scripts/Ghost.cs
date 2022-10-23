@@ -11,6 +11,7 @@ public class Ghost : MonoBehaviour
     private Rigidbody2D body;
     private bool isTouchingWall;
     private GameObject alertGraphic;
+    private AudioSource alertSFX;
 
     [SerializeField] private float patrolRange;
     [SerializeField] private Witch witch;
@@ -22,6 +23,7 @@ public class Ghost : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         currentWaypoint = transform.position;
         alertGraphic = transform.Find("AlertGraphic").gameObject;
+        alertSFX = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -38,6 +40,7 @@ public class Ghost : MonoBehaviour
         if (players.Count > 0)
         {
             alertGraphic.SetActive(true);
+            alertSFX.Play();
             witch.AlertToPlayerPosition(players[players.Count - 1].transform.position);
         }
         else

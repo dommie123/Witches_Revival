@@ -10,6 +10,10 @@ public class Survivor : MonoBehaviour
     private GameObject sprite;
     private bool isDead;
     private Collider2D sCollider;
+    private AudioSource footsteps;
+    private AudioSource deathSound;
+    private Rigidbody2D body;
+    private bool executedDeathSequence;
 
     private void Awake() 
     {
@@ -20,13 +24,28 @@ public class Survivor : MonoBehaviour
         sprite = transform.Find("Sprite").gameObject;
         isDead = false;
         sCollider = GetComponent<Collider2D>();
+        footsteps = GetComponent<AudioSource>();
+        body = GetComponent<Rigidbody2D>();
+        deathSound = transform.Find("Death Sound").GetComponent<AudioSource>();
+        executedDeathSequence = false;
     }
 
     private void Update() 
     {
-        if (isDead)
+        if (isDead && !executedDeathSequence)
         {
             sprite.transform.localRotation = Quaternion.AngleAxis(90, Vector3.forward);
+            footsteps.Stop();
+            deathSound.Play();
+            executedDeathSequence = true;
+        }
+        else if (isDead)
+        {
+            return;
+        }
+        else
+        {
+            UpdateAudioLogic();
         }    
     }
 
@@ -75,5 +94,17 @@ public class Survivor : MonoBehaviour
         selectedGameObject.SetActive(false);
         Destroy(sCollider);
         GetComponent<IMovePosition>().SetMovePosition(transform.position);
+    }
+
+    private void UpdateAudioLogic()
+    {
+        if (body.velocity.magnitude > 0)
+        {
+            footsteps.Play();
+        }
+        else
+        {
+            footsteps.Stop();
+        }
     }
 }

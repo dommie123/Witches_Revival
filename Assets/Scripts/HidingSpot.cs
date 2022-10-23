@@ -12,6 +12,7 @@ public class HidingSpot : MonoBehaviour
     private bool isSelected;
     private float cooldown;
     private Collider2D hsCollider;
+    private AudioSource sfx;
 
     private void Awake() 
     {
@@ -20,6 +21,7 @@ public class HidingSpot : MonoBehaviour
         selectedGameObject.SetActive(false);
         cooldown = 0f;
         hsCollider = GetComponent<Collider2D>();
+        sfx = GetComponent<AudioSource>();
     }
 
     private void Update() 
@@ -44,6 +46,11 @@ public class HidingSpot : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(1))  // right mouse button is released
         {
+            if (occupants.Count > 0)
+            {
+                sfx.Play();
+            }
+
             foreach (Survivor survivor in occupants)
             {
                 if (survivor.GetIsHidden())
@@ -73,6 +80,7 @@ public class HidingSpot : MonoBehaviour
             Survivor survivor = other.gameObject.GetComponent<Survivor>();
             survivor.ToggleHidden();
             occupants.Add(survivor);
+            sfx.Play();
         }    
     }
 

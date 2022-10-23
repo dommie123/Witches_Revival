@@ -9,9 +9,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private float jumpscareCooldown;
     [SerializeField] private string mainLevel;
+    [SerializeField] private AudioSource bgm;
     private List<Survivor> survivors;
     private bool losingSequenceActive;
     private bool winningSequenceActive;
+    private AudioSource jumpscareSound;
 
     public List<Survivor> escapedSurvivors;
     public GameObject jumpscarePanel;
@@ -26,6 +28,7 @@ public class GameManager : MonoBehaviour
         escapedSurvivors = new List<Survivor>();
         losingSequenceActive = false;
         winningSequenceActive = false;
+        jumpscareSound = GetComponent<AudioSource>();
 
         Survivor[] survivorsArr = Object.FindObjectsOfType<Survivor>();
         foreach (Survivor survivor in survivorsArr)
@@ -78,6 +81,7 @@ public class GameManager : MonoBehaviour
         {
             hud.SetActive(false);
             winPanel.SetActive(true);
+            bgm.Stop();
             winningSequenceActive = true;
             return;
         }
@@ -92,7 +96,8 @@ public class GameManager : MonoBehaviour
             hud.SetActive(false);
             jumpscarePanel.SetActive(true);
             losingSequenceActive = true;
-            // TODO play scream sound here
+            bgm.Stop();
+            jumpscareSound.Play();
             return;
         }
 
