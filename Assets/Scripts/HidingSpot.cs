@@ -7,6 +7,7 @@ public class HidingSpot : MonoBehaviour
 {
     [SerializeField] private int capacity;
     [SerializeField] private GameObject selectedGameObject;
+    [SerializeField] private Sprite portrait;
 
     private List<Survivor> occupants;  // # of people in hiding spot
     private bool isSelected;
@@ -40,6 +41,11 @@ public class HidingSpot : MonoBehaviour
     {        
         this.isSelected = isSelected;
         selectedGameObject.SetActive(isSelected);
+    }
+
+    public Sprite GetPortrait()
+    {
+        return portrait;
     }
 
     private void UpdatePlayerInputs()

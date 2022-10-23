@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     private bool losingSequenceActive;
     private bool winningSequenceActive;
     private AudioSource jumpscareSound;
+    private int numSurvivorsLeft;
+    private int numSurvivorsEscaped;
 
     public List<Survivor> escapedSurvivors;
     public GameObject jumpscarePanel;
@@ -36,7 +38,9 @@ public class GameManager : MonoBehaviour
             survivors.Add(survivor);
         }
 
-        // TODO set up UI elements and behaviors
+        numSurvivorsLeft = survivors.Count;
+        numSurvivorsEscaped = escapedSurvivors.Count;
+        HUDManager.instance.UpdateSurvivorText(numSurvivorsEscaped, numSurvivorsLeft);
     }
 
     // Update is called once per frame
@@ -44,6 +48,7 @@ public class GameManager : MonoBehaviour
     {
         // If all of the survivors are dead, the game is over.
         bool gameLost = true;
+
         foreach (Survivor survivor in survivors)
         {
             if (!survivor.GetIsDead())
@@ -63,6 +68,8 @@ public class GameManager : MonoBehaviour
                 activeSurvivors--;
             }
         }
+
+        RefreshSurvivorCounts();
 
         if (activeSurvivors == escapedSurvivors.Count && !gameLost)
         {
@@ -133,5 +140,25 @@ public class GameManager : MonoBehaviour
     public void RetryGame()
     {
         SceneManager.LoadScene(mainLevel);
+    }
+
+    private void RefreshSurvivorCounts()
+    {
+        int survivorsAlive = survivors.Count;
+
+        foreach (Survivor survivor in survivors)
+        {
+            if (survivor.GetIsDead())
+            {
+                survivorsAlive--;
+            }
+        }
+
+        if (numSurvivorsLeft != survivorsAlive || numSurvivorsEscaped != escapedSurvivors.Count)
+        {
+            numSurvivorsLeft = survivorsAlive;
+            numSurvivorsEscaped = escapedSurvivors.Count;
+            HUDManager.instance.UpdateSurvivorText(numSurvivorsEscaped, numSurvivorsLeft);
+        }   
     }
 }

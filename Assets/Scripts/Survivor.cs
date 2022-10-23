@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Survivor : MonoBehaviour
 {
+    [SerializeField] private Sprite portrait;
+
     private GameObject selectedGameObject;
     private bool isHidden;
     private string originalTag;
@@ -90,10 +92,16 @@ public class Survivor : MonoBehaviour
 
     public void KillSurvivor()
     {
+        
         isDead = true;
         selectedGameObject.SetActive(false);
         Destroy(sCollider);
         GetComponent<IMovePosition>().SetMovePosition(transform.position);
+    }
+
+    public Sprite GetPortrait()
+    {
+        return portrait;
     }
 
     private void UpdateAudioLogic()

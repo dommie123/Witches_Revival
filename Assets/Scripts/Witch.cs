@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using Unity.Mathematics;
 
 public class Witch : MonoBehaviour
 {
+    public event EventHandler OnKillPlayer;
+
     protected enum PatrolState 
     {
         Patrolling, 
@@ -152,7 +155,10 @@ public class Witch : MonoBehaviour
         if (other.gameObject.tag == "Wall")
             isTouchingWall = true;
         else if (other.gameObject.tag == "Player")
+        {
             other.gameObject.GetComponent<Survivor>().KillSurvivor();
+            OnKillPlayer?.Invoke(this, EventArgs.Empty);
+        }
     }
 }
 

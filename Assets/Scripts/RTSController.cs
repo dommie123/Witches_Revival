@@ -15,6 +15,7 @@ public class RTSController : MonoBehaviour
     private Vector3 movePosition;
     private float minCameraZoom;
     private float maxCameraZoom;
+    private Witch witch;
 
     private void Awake() 
     {
@@ -23,6 +24,8 @@ public class RTSController : MonoBehaviour
         selectionAreaTransform.gameObject.SetActive(false);
         minCameraZoom = 100f;
         maxCameraZoom = 5f;
+        witch = Object.FindObjectOfType<Witch>();
+        witch.OnKillPlayer += OnKillPlayer;
         // movePosition = new Vector3(0, 0, 0);
     }
 
@@ -30,6 +33,11 @@ public class RTSController : MonoBehaviour
     void Update()
     {
         UpdatePlayerInputs();
+    }
+    
+    public List<Survivor> GetSelectedSurvivors()
+    {
+        return selectedSurvivors;
     }
 
     private void UpdatePlayerInputs()
@@ -93,6 +101,8 @@ public class RTSController : MonoBehaviour
                 }
             }
 
+            HUDManager.instance.UpdateSelectedSurvivors(selectedSurvivors, selectedHidingSpots);
+
             // Debug.Log($"Survivors selected: {selectedSurvivors.Count}");
         }
 
@@ -148,5 +158,23 @@ public class RTSController : MonoBehaviour
     private Vector3 ApplyRotationToVector(Vector3 vec, float angle)
     {
         return Quaternion.Euler(0, 0, angle) * vec;
+    }
+
+    private void OnKillPlayer(object sender, System.EventArgs e)
+    {
+        Survivor deadSurvivor = null;
+        foreach (Survivor survivor in selectedSurvivors)
+        {
+            if (survivor.GetIsDead())
+            {
+                deadSurvivor = survivor;
+            }
+        }
+
+        if (deadSurvivor != null)
+        {
+            selectedSurvivors.Remove(deadSurvivor);
+            HUDManager.instance.UpdateSelectedSurvivors(selectedSurvivors, selectedHidingSpots);
+        }
     }
 }
