@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioSource bgm;
     [SerializeField] private GameObject ghost;
     [SerializeField] private GameObject witch;
-    // [SerializeField] private Sprite ghostSprite;
+
     private List<Survivor> survivors;
     private bool losingSequenceActive;
     private bool winningSequenceActive;
@@ -187,7 +187,6 @@ public class GameManager : MonoBehaviour
 
     private void SpawnEnemy(Vector3 spawnLocation)
     {
-        // ghost.transform.Find("Sprite").GetComponent<SpriteRenderer>().sprite = ghostSprite;
         Instantiate(ghost, spawnLocation, Quaternion.identity);
     }
 }

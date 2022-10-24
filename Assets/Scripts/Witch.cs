@@ -23,8 +23,13 @@ public class Witch : MonoBehaviour
     private Rigidbody2D body;
     private bool isTouchingWall;
     private float wallCooldown;
+    private float teleportCooldown;
+    private Transform[] tpLocations;
 
     [SerializeField] private float patrolRange;
+    // [SerializeField] private float minDistanceToPlayer;
+    [SerializeField] private GameObject tpLocationList;
+    [SerializeField] private float teleportTimer;
 
     private void Awake() 
     {
@@ -35,6 +40,12 @@ public class Witch : MonoBehaviour
         currentWaypoint = transform.position;
         lastKnownPosition = transform.position;
         wallCooldown = 0f;
+        teleportCooldown = teleportTimer;
+
+        if (tpLocationList)
+        {
+            tpLocations = tpLocationList.GetComponentsInChildren<Transform>();
+        }
     }
 
     // Update is called once per frame
@@ -44,6 +55,7 @@ public class Witch : MonoBehaviour
 
         LookForPlayers(objects);
         UpdateDirection();
+        UpdateTeleportStatus();
     }
 
     public void AlertToPlayerPosition(Vector3 playerPos)
@@ -183,6 +195,30 @@ public class Witch : MonoBehaviour
     {
         // Debug.Log(Vector3.Distance(transform.position, position));
         return Vector3.Distance(transform.position, position) < 2.5f;
+    }
+
+    private void UpdateTeleportStatus()
+    {
+        if (patrolState != PatrolState.Chasing)
+        {
+            if (teleportCooldown <= 0)
+            {
+                TeleportToRandomPosition();
+                teleportCooldown = teleportTimer;
+            }
+            else
+            {
+                teleportCooldown -= Time.deltaTime;
+            }
+        }
+    }
+
+    private void TeleportToRandomPosition()
+    {
+        int randIndex = UnityEngine.Random.Range(0, tpLocations.Length);
+        this.transform.position = tpLocations[randIndex].position;
+        SetRandomDirection();
+        currentWaypoint = (lineOfSight.GetDirectionAsVector3() * patrolRange) + transform.position;
     }
 
     private void OnCollisionEnter2D(Collision2D other) 
