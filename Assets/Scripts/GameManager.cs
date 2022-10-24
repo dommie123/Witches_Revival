@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float jumpscareCooldown;
     [SerializeField] private string mainLevel;
     [SerializeField] private AudioSource bgm;
+    [SerializeField] private GameObject ghost;
+    [SerializeField] private GameObject witch;
+    // [SerializeField] private Sprite ghostSprite;
     private List<Survivor> survivors;
     private bool losingSequenceActive;
     private bool winningSequenceActive;
@@ -40,7 +43,11 @@ public class GameManager : MonoBehaviour
 
         numSurvivorsLeft = survivors.Count;
         numSurvivorsEscaped = escapedSurvivors.Count;
-        HUDManager.instance.UpdateSurvivorText(numSurvivorsEscaped, numSurvivorsLeft);
+
+        if (SceneManager.GetActiveScene().name != "TestScene2")
+        {
+            SpawnEnemies();
+        }
     }
 
     // Update is called once per frame
@@ -142,6 +149,12 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(mainLevel);
     }
 
+    // We need this because the HUD manager doesn't want to wake up before the Game Manger for some reason.
+    public void HUDManagerIsAwake()
+    {
+        HUDManager.instance.UpdateSurvivorText(numSurvivorsEscaped, numSurvivorsLeft);
+    }
+
     private void RefreshSurvivorCounts()
     {
         int survivorsAlive = survivors.Count;
@@ -160,5 +173,21 @@ public class GameManager : MonoBehaviour
             numSurvivorsEscaped = escapedSurvivors.Count;
             HUDManager.instance.UpdateSurvivorText(numSurvivorsEscaped, numSurvivorsLeft);
         }   
+    }
+
+    private void SpawnEnemies()
+    {
+        SpawnLocation[] spawnLocations = Object.FindObjectsOfType<SpawnLocation>();
+
+        foreach (SpawnLocation location in spawnLocations)
+        {
+            SpawnEnemy(location.transform.position);
+        }
+    }
+
+    private void SpawnEnemy(Vector3 spawnLocation)
+    {
+        // ghost.transform.Find("Sprite").GetComponent<SpriteRenderer>().sprite = ghostSprite;
+        Instantiate(ghost, spawnLocation, Quaternion.identity);
     }
 }

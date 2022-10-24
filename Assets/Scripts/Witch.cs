@@ -22,6 +22,7 @@ public class Witch : MonoBehaviour
     private IMovePosition movePosition;
     private Rigidbody2D body;
     private bool isTouchingWall;
+    private float wallCooldown;
 
     [SerializeField] private float patrolRange;
 
@@ -33,6 +34,7 @@ public class Witch : MonoBehaviour
         patrolState = PatrolState.Patrolling;
         currentWaypoint = transform.position;
         lastKnownPosition = transform.position;
+        wallCooldown = 0f;
     }
 
     // Update is called once per frame
@@ -114,9 +116,22 @@ public class Witch : MonoBehaviour
 
         if (IsNearPosition(currentWaypoint) || isTouchingWall)
         {
-            isTouchingWall = false;
-            SetRandomDirection();
-            currentWaypoint = (lineOfSight.GetDirectionAsVector3() * patrolRange) + transform.position;
+            // isTouchingWall = false;
+            if (isTouchingWall && wallCooldown > 0f)
+            {
+                wallCooldown -= Time.deltaTime;
+            }
+            else if (isTouchingWall)
+            {
+                SetInvertedDirection(lineOfSight.GetDirection());
+                currentWaypoint = (lineOfSight.GetDirectionAsVector3() * patrolRange) + transform.position;
+            }
+            else
+            {
+                SetRandomDirection();
+                currentWaypoint = (lineOfSight.GetDirectionAsVector3() * patrolRange) + transform.position;
+            }
+            
         }
 
         // Debug.Log(currentWaypoint);
@@ -144,6 +159,26 @@ public class Witch : MonoBehaviour
         }
     }
 
+    private void SetInvertedDirection(LineOfSight.Direction currentDirection)
+    {
+        if (currentDirection == LineOfSight.Direction.Left)
+        {
+            lineOfSight.SetDirection(LineOfSight.Direction.Right);
+        }
+        else if (currentDirection == LineOfSight.Direction.Right)
+        {
+            lineOfSight.SetDirection(LineOfSight.Direction.Left);
+        }
+        else if (currentDirection == LineOfSight.Direction.Up)
+        {
+            lineOfSight.SetDirection(LineOfSight.Direction.Down);
+        }
+        else
+        {
+            lineOfSight.SetDirection(LineOfSight.Direction.Up);
+        }
+    }
+
     private bool IsNearPosition(Vector3 position)
     {
         // Debug.Log(Vector3.Distance(transform.position, position));
@@ -153,11 +188,23 @@ public class Witch : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other) 
     {
         if (other.gameObject.tag == "Wall")
+        {
+            SetInvertedDirection(lineOfSight.GetDirection());
             isTouchingWall = true;
+            wallCooldown = 2f;
+        }
         else if (other.gameObject.tag == "Player")
         {
             other.gameObject.GetComponent<Survivor>().KillSurvivor();
             OnKillPlayer?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D other) 
+    {
+        if (other.gameObject.tag == "Wall")
+        {
+            isTouchingWall = false;
         }
     }
 }

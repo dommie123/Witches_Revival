@@ -69,6 +69,11 @@ public class LineOfSight : MonoBehaviour
         direction = dir;
     }
 
+    public Direction GetDirection()
+    {
+        return direction;
+    }
+
     public Vector3 GetDirectionAsVector3()
     {
         switch (direction)
