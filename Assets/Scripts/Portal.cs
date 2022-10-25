@@ -44,6 +44,11 @@ public class Portal : MonoBehaviour
         portalWoosh.Play();
         exitPortal.PlayerIsExiting = true;
         other.transform.position = exitPortal.transform.position;   // Teleport entity to portal's position
+
+        if (other.gameObject.tag == "Player")
+        {
+            CameraStatics.SnapCameraToPosition(exitPortal.transform.position);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other) 

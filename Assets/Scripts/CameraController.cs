@@ -20,6 +20,17 @@ public class CameraController : MonoBehaviour
         UpdatePlayerInputs();
     }
 
+    public void SnapToPosition(Vector3 position)
+    {
+        Vector3 newCameraPos = new Vector3(
+            position.x, 
+            position.y, 
+            transform.position.z     // Keep original camera z coordinate
+        );
+
+        this.transform.position = newCameraPos;
+    }
+
     private void UpdatePlayerInputs()
     {
         float horozontalVelocity = Input.GetAxis("Horizontal") * moveSpeed;
