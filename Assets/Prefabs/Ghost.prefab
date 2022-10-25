@@ -182,6 +182,7 @@ GameObject:
   - component: {fileID: 771169678853348011}
   - component: {fileID: 771169678853348008}
   - component: {fileID: 5630914698544583953}
+  - component: {fileID: 6329803835394403587}
   m_Layer: 3
   m_Name: Ghost
   m_TagString: Ghost
@@ -281,7 +282,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e90f8a4976b3a5f4dad7e7f6ae993955, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
 --- !u!82 &5630914698544583953
 AudioSource:
   m_ObjectHideFlags: 0
@@ -378,6 +378,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6329803835394403587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 771169678853348015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ed0c9bd324f4b041ac163680d67c200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 10
 --- !u!1 &771169679237989304
 GameObject:
   m_ObjectHideFlags: 0

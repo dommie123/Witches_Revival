@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 5690980565414054126}
   - component: {fileID: 5690980565414054121}
   - component: {fileID: 4950660487893531932}
+  - component: {fileID: 3607558544050355979}
   m_Layer: 3
   m_Name: Witch
   m_TagString: Untagged
@@ -174,7 +175,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e90f8a4976b3a5f4dad7e7f6ae993955, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+--- !u!114 &3607558544050355979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5690980565414054124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ed0c9bd324f4b041ac163680d67c200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 10
 --- !u!1 &5690980565545324384
 GameObject:
   m_ObjectHideFlags: 0

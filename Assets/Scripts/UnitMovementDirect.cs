@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class UnitMovementDirect : MonoBehaviour, IMovePosition
 {
-    [SerializeField] private float moveSpeed;
+    // [SerializeField] private float moveSpeed;
 
     private Vector3 movePosition;
     private Rigidbody2D body;
+    private IMoveVelocity moveVelocity;
 
     private void Awake() 
     {
         body = GetComponent<Rigidbody2D>();
+        moveVelocity = GetComponent<IMoveVelocity>();
         movePosition = transform.position;
     }
 
@@ -23,7 +25,8 @@ public class UnitMovementDirect : MonoBehaviour, IMovePosition
         if (Vector3.Distance(movePosition, transform.position) < 1f)
             moveDir = Vector3.zero;     // Stop moving when close to move position
 
-        body.velocity = moveDir * moveSpeed;
+        // body.velocity = moveDir * moveSpeed;
+        moveVelocity.SetVelocity(moveDir);
         //Debug.Log(moveDir);
     }
 

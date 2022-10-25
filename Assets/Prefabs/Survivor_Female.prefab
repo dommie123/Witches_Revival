@@ -226,6 +226,7 @@ GameObject:
   - component: {fileID: 7312311728361690331}
   - component: {fileID: 1850844273773304688}
   - component: {fileID: 422585511145022850}
+  - component: {fileID: 1959218785637138089}
   m_Layer: 3
   m_Name: Survivor_Female
   m_TagString: Player
@@ -297,7 +298,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e90f8a4976b3a5f4dad7e7f6ae993955, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
 --- !u!61 &1850844273773304688
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -420,6 +420,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1959218785637138089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8662572024916104485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ed0c9bd324f4b041ac163680d67c200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 10
 --- !u!1 &8662572025032201412
 GameObject:
   m_ObjectHideFlags: 0
