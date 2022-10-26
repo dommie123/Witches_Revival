@@ -28,10 +28,12 @@ public class GameManager : MonoBehaviour
     public GameObject hud;
     public GameObject winPanel;
     public GameObject pauseMenu;
+    public GameObject optionsPanel;
+    public GameObject instructionsPanel;
     
     private void Awake()
     {
-        options = GameObject.Find("GameOptions").GetComponent<OptionsManager>();
+        // options = GameObject.Find("GameOptions").GetComponent<OptionsManager>();
         instance = this;
         survivors = new List<Survivor>();
         escapedSurvivors = new List<Survivor>();
@@ -54,6 +56,13 @@ public class GameManager : MonoBehaviour
             SpawnEnemies();
         }
 
+        HUDManager.instance.UpdateSurvivorText(numSurvivorsEscaped, numSurvivorsLeft);
+    }
+
+    private void OnEnable() 
+    {
+        options = GameObject.Find("GameOptions").GetComponent<OptionsManager>();
+        
         if (options != null)
         {
             Debug.Log(
@@ -61,8 +70,6 @@ public class GameManager : MonoBehaviour
                 $"Zoom Sensitivity: {options.GetZoomSensitivity()}"
             );
         }
-
-        // HUDManager.instance.UpdateSurvivorText(numSurvivorsEscaped, numSurvivorsLeft);
     }
 
     // Update is called once per frame
@@ -170,16 +177,26 @@ public class GameManager : MonoBehaviour
 
     public void PauseGame()
     {
-        if (gamePaused)
+        if (gamePaused && !OptionsOrInstructionsActive())
         {
             Time.timeScale = 1f;
             pauseMenu.SetActive(false);
         }
-        else
+        else if (!gamePaused)
         {
             Time.timeScale = 0f;
             pauseMenu.SetActive(true);
         }
+        
+        if (!OptionsOrInstructionsActive())
+        {
+            gamePaused = !gamePaused;
+        }
+    }
+
+    public bool GameIsPaused()
+    {
+        return gamePaused;
     }
 
     private void RefreshSurvivorCounts()
@@ -215,5 +232,10 @@ public class GameManager : MonoBehaviour
     private void SpawnEnemy(Vector3 spawnLocation)
     {
         Instantiate(ghost, spawnLocation, Quaternion.identity);
+    }
+
+    private bool OptionsOrInstructionsActive()
+    {
+        return optionsPanel.activeInHierarchy || instructionsPanel.activeInHierarchy;
     }
 }

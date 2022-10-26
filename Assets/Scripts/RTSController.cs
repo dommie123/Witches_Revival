@@ -20,7 +20,7 @@ public class RTSController : MonoBehaviour
 
     private void Awake() 
     {
-        options = GameObject.Find("GameOptions").GetComponent<OptionsManager>();
+        // options = GameObject.Find("GameOptions").GetComponent<OptionsManager>();
         selectedSurvivors = new List<Survivor>();
         selectedHidingSpots = new List<HidingSpot>();
         selectionAreaTransform.gameObject.SetActive(false);
@@ -29,20 +29,30 @@ public class RTSController : MonoBehaviour
         witch = Object.FindObjectOfType<Witch>();
         witch.OnKillPlayer += OnKillPlayer;
 
-        if (options != null)
-        {
-            zoomSensitivity = options.GetZoomSensitivity();
-        }
-        else
-        {
-            zoomSensitivity = 7.5f;
-        }
+        // if (options != null)
+        // {
+        //     zoomSensitivity = options.GetZoomSensitivity();
+        // }
+        // else
+        // {
+        //     zoomSensitivity = 7.5f;
+        // }
+    }
+
+    private void OnEnable() 
+    {
+        RefreshOptions();
     }
 
     // Update is called once per frame
     void Update()
     {
         UpdatePlayerInputs();
+
+        if (zoomSensitivity != options.GetZoomSensitivity())
+        {
+            RefreshOptions();
+        }
     }
     
     public List<Survivor> GetSelectedSurvivors()
@@ -52,6 +62,14 @@ public class RTSController : MonoBehaviour
 
     private void UpdatePlayerInputs()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameManager.instance.PauseGame();
+        }   
+
+        if (GameManager.instance.GameIsPaused())
+            return;
+
         if (Input.GetMouseButtonDown(0))    // If left mouse button is pressed
         {
             startPosition = UtilsClass.GetMouseWorldPosition();
@@ -111,11 +129,6 @@ public class RTSController : MonoBehaviour
                 }
             }
 
-            if (Input.GetKey(KeyCode.Escape))
-            {
-                GameManager.instance.PauseGame();
-            }
-
             HUDManager.instance.UpdateSelectedSurvivors(selectedSurvivors, selectedHidingSpots);
 
             // Debug.Log($"Survivors selected: {selectedSurvivors.Count}");
@@ -144,6 +157,8 @@ public class RTSController : MonoBehaviour
         {
             cam.orthographicSize -= (Input.GetAxis("Mouse ScrollWheel") * zoomSensitivity);
         }
+
+    
     }
 
     private List<Vector3> GetPositionListAround(Vector3 startPosition, float[] ringDistanceArray, int[] ringPositionCountArray)
@@ -190,6 +205,20 @@ public class RTSController : MonoBehaviour
         {
             selectedSurvivors.Remove(deadSurvivor);
             HUDManager.instance.UpdateSelectedSurvivors(selectedSurvivors, selectedHidingSpots);
+        }
+    }
+
+    private void RefreshOptions()
+    {
+        options = GameObject.Find("GameOptions").GetComponent<OptionsManager>();
+
+        if (options != null)
+        {
+            zoomSensitivity = options.GetZoomSensitivity();
+        }
+        else
+        {
+            zoomSensitivity = 7.5f;
         }
     }
 }

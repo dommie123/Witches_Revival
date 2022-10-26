@@ -4,15 +4,30 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject optionsPanel;
+    public GameObject instructionsPanel;
+    public GameObject pauseMenuPanel;
+    // public GameObject hud;
+
+    public void HowToPlay()
     {
-        
+        pauseMenuPanel.SetActive(false);
+        // hud.SetActive(false);
+        instructionsPanel.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Options()
     {
-        
+        // hud.SetActive(false);
+        pauseMenuPanel.SetActive(false);
+        optionsPanel.SetActive(true);
+    }
+
+    public void GoBack()
+    {
+        optionsPanel.SetActive(false);
+        instructionsPanel.SetActive(false);
+        pauseMenuPanel.SetActive(true);
+        // hud.SetActive(true);
     }
 }
