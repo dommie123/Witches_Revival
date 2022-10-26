@@ -8,6 +8,8 @@ public class OptionsManager : MonoBehaviour
 {
     public static OptionsManager instance;
     
+    private float cameraSpeed;
+    private float zoomSensitivity;
     private float gameVolume;
     private float screenBrightness;
     private bool isFullScreen;
@@ -15,6 +17,8 @@ public class OptionsManager : MonoBehaviour
 
     private void Awake() 
     {
+        cameraSpeed = 10f;
+        zoomSensitivity = 7.5f;
         screenBrightness = 1f;
         gameVolume = 1f;
         isFullScreen = true;
@@ -45,6 +49,25 @@ public class OptionsManager : MonoBehaviour
             Screen.brightness = screenBrightness;
     }
 
+    public float GetCameraSpeed()
+    {
+        return cameraSpeed;
+    }
+
+    public void SetCameraSpeed(float cameraSpeed)
+    {
+        this.cameraSpeed = cameraSpeed;
+    }
+
+    public float GetZoomSensitivity()
+    {
+        return zoomSensitivity;
+    }
+
+    public void SetZoomSensitivity(float zoomSensitivity)
+    {
+        this.zoomSensitivity = zoomSensitivity;
+    }
     public void SetGameVolume(float volume)
     {
         gameVolume = volume;

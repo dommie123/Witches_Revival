@@ -12,10 +12,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioSource bgm;
     [SerializeField] private GameObject ghost;
     [SerializeField] private GameObject witch;
+    private OptionsManager options;
 
     private List<Survivor> survivors;
     private bool losingSequenceActive;
     private bool winningSequenceActive;
+    private bool gamePaused;
     private AudioSource jumpscareSound;
     private int numSurvivorsLeft;
     private int numSurvivorsEscaped;
@@ -25,14 +27,17 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject hud;
     public GameObject winPanel;
+    public GameObject pauseMenu;
     
     private void Awake()
     {
+        options = GameObject.Find("GameOptions").GetComponent<OptionsManager>();
         instance = this;
         survivors = new List<Survivor>();
         escapedSurvivors = new List<Survivor>();
         losingSequenceActive = false;
         winningSequenceActive = false;
+        gamePaused = false;
         jumpscareSound = GetComponent<AudioSource>();
 
         Survivor[] survivorsArr = Object.FindObjectsOfType<Survivor>();
@@ -48,6 +53,16 @@ public class GameManager : MonoBehaviour
         {
             SpawnEnemies();
         }
+
+        if (options != null)
+        {
+            Debug.Log(
+                $"Camera Speed: {options.GetCameraSpeed()} " + 
+                $"Zoom Sensitivity: {options.GetZoomSensitivity()}"
+            );
+        }
+
+        // HUDManager.instance.UpdateSurvivorText(numSurvivorsEscaped, numSurvivorsLeft);
     }
 
     // Update is called once per frame
@@ -90,7 +105,6 @@ public class GameManager : MonoBehaviour
 
     public void WinGame()
     {
-        // Debug.Log("I won!");
         if (!winningSequenceActive)
         {
             hud.SetActive(false);
@@ -103,7 +117,6 @@ public class GameManager : MonoBehaviour
 
     public void LoseGame()
     {
-        // Debug.Log("Game Over!");
         // Disable hud, enable jumpscare
         if (!losingSequenceActive)
         {
@@ -153,6 +166,20 @@ public class GameManager : MonoBehaviour
     public void HUDManagerIsAwake()
     {
         HUDManager.instance.UpdateSurvivorText(numSurvivorsEscaped, numSurvivorsLeft);
+    }
+
+    public void PauseGame()
+    {
+        if (gamePaused)
+        {
+            Time.timeScale = 1f;
+            pauseMenu.SetActive(false);
+        }
+        else
+        {
+            Time.timeScale = 0f;
+            pauseMenu.SetActive(true);
+        }
     }
 
     private void RefreshSurvivorCounts()

@@ -4,14 +4,24 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed;
-
+    private float moveSpeed;
     private Rigidbody2D body;
+    private OptionsManager options;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         body = GetComponent<Rigidbody2D>();
+        options = GameObject.Find("GameOptions").GetComponent<OptionsManager>();
+        
+        if (options != null)
+        {
+            moveSpeed = options.GetCameraSpeed();
+        }
+        else
+        {
+            moveSpeed = 10;
+        }
     }
 
     // Update is called once per frame

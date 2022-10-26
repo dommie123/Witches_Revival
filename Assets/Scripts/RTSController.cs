@@ -7,8 +7,9 @@ public class RTSController : MonoBehaviour
 {
     [SerializeField] private Transform selectionAreaTransform;
     [SerializeField] private Camera cam;
-    [SerializeField] private float zoomSensitivity;
-
+    
+    private OptionsManager options;
+    private float zoomSensitivity;
     private Vector3 startPosition;
     private List<Survivor> selectedSurvivors;
     private List<HidingSpot> selectedHidingSpots;
@@ -19,6 +20,7 @@ public class RTSController : MonoBehaviour
 
     private void Awake() 
     {
+        options = GameObject.Find("GameOptions").GetComponent<OptionsManager>();
         selectedSurvivors = new List<Survivor>();
         selectedHidingSpots = new List<HidingSpot>();
         selectionAreaTransform.gameObject.SetActive(false);
@@ -26,7 +28,15 @@ public class RTSController : MonoBehaviour
         maxCameraZoom = 5f;
         witch = Object.FindObjectOfType<Witch>();
         witch.OnKillPlayer += OnKillPlayer;
-        // movePosition = new Vector3(0, 0, 0);
+
+        if (options != null)
+        {
+            zoomSensitivity = options.GetZoomSensitivity();
+        }
+        else
+        {
+            zoomSensitivity = 7.5f;
+        }
     }
 
     // Update is called once per frame
@@ -99,6 +109,11 @@ public class RTSController : MonoBehaviour
                     hidingSpot.SetSelected(true);
                     selectedHidingSpots.Add(hidingSpot);
                 }
+            }
+
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                GameManager.instance.PauseGame();
             }
 
             HUDManager.instance.UpdateSelectedSurvivors(selectedSurvivors, selectedHidingSpots);
