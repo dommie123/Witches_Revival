@@ -6,6 +6,9 @@ public class Portal : MonoBehaviour
 {
     private Portal[] portals;
     private AudioSource portalWoosh;
+    private ParticleSystem particles;
+    private ParticleSystem wooshParticles;
+    private float wooshTimer;
 
     [SerializeField] private int sourceIndex;
     [SerializeField] private int targetIndex;
@@ -16,7 +19,18 @@ public class Portal : MonoBehaviour
     {
         portals = Object.FindObjectsOfType<Portal>();
         portalWoosh = GetComponent<AudioSource>();
+        particles = transform.Find("Portal Particles").GetComponent<ParticleSystem>();
+        wooshParticles = transform.Find("Portal Woosh Particles").GetComponent<ParticleSystem>();
+        wooshTimer = 1f;
         PlayerIsExiting = false;
+    }
+
+    private void Update() 
+    {
+        if (wooshParticles.time >= wooshTimer)
+        {
+            wooshParticles.Stop();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other) 
@@ -42,8 +56,11 @@ public class Portal : MonoBehaviour
             return;
         
         portalWoosh.Play();
+        wooshParticles.Play();
+        exitPortal.GetWooshParticles().Play();
         exitPortal.PlayerIsExiting = true;
         other.transform.position = exitPortal.transform.position;   // Teleport entity to portal's position
+
 
         if (other.gameObject.tag == "Player")
         {
@@ -59,5 +76,10 @@ public class Portal : MonoBehaviour
     public int GetSourceIndex()
     {
         return sourceIndex;
+    }
+
+    public ParticleSystem GetWooshParticles()
+    {
+        return wooshParticles;
     }
 }

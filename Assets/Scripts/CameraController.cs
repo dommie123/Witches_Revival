@@ -37,6 +37,11 @@ public class CameraController : MonoBehaviour
 
         UpdatePlayerInputs();
 
+        if (options == null)
+        {
+            return;
+        }
+
         if (moveSpeed != options.GetCameraSpeed())
         {
             RefreshOptions();
@@ -64,10 +69,11 @@ public class CameraController : MonoBehaviour
 
     private void RefreshOptions()
     {
-        options = GameObject.Find("GameOptions").GetComponent<OptionsManager>();
+        GameObject gameOptions = GameObject.Find("GameOptions");//.GetComponent<OptionsManager>();
         
-        if (options != null)
+        if (gameOptions != null)
         {
+            options = gameOptions.GetComponent<OptionsManager>();
             moveSpeed = options.GetCameraSpeed();
         }
         else

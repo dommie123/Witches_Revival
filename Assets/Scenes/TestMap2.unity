@@ -530,6 +530,46 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 8696494355788600954}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &620557514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 620557516}
+  - component: {fileID: 620557515}
+  m_Layer: 0
+  m_Name: Audio Listener
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!81 &620557515
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620557514}
+  m_Enabled: 1
+--- !u!4 &620557516
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620557514}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 24.00122, y: 25.33798, z: -8.583243}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &667437212 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 469352368627092704, guid: fedb406892c848944b3147bad3707b1b,
@@ -1733,6 +1773,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5690980565414054121, guid: 587923eb5b326b04faa294174c3f9c4a,
         type: 3}
+      propertyPath: bgmSource
+      value: 
+      objectReference: {fileID: 1135414999}
+    - target: {fileID: 5690980565414054121, guid: 587923eb5b326b04faa294174c3f9c4a,
+        type: 3}
       propertyPath: teleportTimer
       value: 10
       objectReference: {fileID: 0}
@@ -2079,5 +2124,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2038340890}
+    - target: {fileID: 9134207290359303582, guid: da4105a6a61aa36419269cdf3655ad90,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da4105a6a61aa36419269cdf3655ad90, type: 3}

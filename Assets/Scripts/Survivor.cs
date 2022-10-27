@@ -16,6 +16,7 @@ public class Survivor : MonoBehaviour
     private AudioSource deathSound;
     private Rigidbody2D body;
     private bool executedDeathSequence;
+    private ParticleSystem deathParticles;
 
     private void Awake() 
     {
@@ -29,6 +30,7 @@ public class Survivor : MonoBehaviour
         footsteps = GetComponent<AudioSource>();
         body = GetComponent<Rigidbody2D>();
         deathSound = transform.Find("Death Sound").GetComponent<AudioSource>();
+        deathParticles = transform.Find("Death Particles").GetComponent<ParticleSystem>();
         executedDeathSequence = false;
     }
 
@@ -39,6 +41,7 @@ public class Survivor : MonoBehaviour
             sprite.transform.localRotation = Quaternion.AngleAxis(90, Vector3.forward);
             footsteps.Stop();
             deathSound.Play();
+            deathParticles.Play();
             executedDeathSequence = true;
         }
         else if (isDead)

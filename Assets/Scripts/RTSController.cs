@@ -49,6 +49,11 @@ public class RTSController : MonoBehaviour
     {
         UpdatePlayerInputs();
 
+        if (options == null)
+        {
+            return;
+        }
+
         if (zoomSensitivity != options.GetZoomSensitivity())
         {
             RefreshOptions();
@@ -210,10 +215,11 @@ public class RTSController : MonoBehaviour
 
     private void RefreshOptions()
     {
-        options = GameObject.Find("GameOptions").GetComponent<OptionsManager>();
+        GameObject gameOptions = GameObject.Find("GameOptions");//.GetComponent<OptionsManager>();
 
-        if (options != null)
+        if (gameOptions != null)
         {
+            options = gameOptions.GetComponent<OptionsManager>();
             zoomSensitivity = options.GetZoomSensitivity();
         }
         else
