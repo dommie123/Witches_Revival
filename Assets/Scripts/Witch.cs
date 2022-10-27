@@ -24,12 +24,17 @@ public class Witch : MonoBehaviour
     private bool isTouchingWall;
     private float wallCooldown;
     private float teleportCooldown;
+    private float chaseCooldown;
     private Transform[] tpLocations;
+    private bool playerWasSpotted;
 
     [SerializeField] private float patrolRange;
     // [SerializeField] private float minDistanceToPlayer;
     [SerializeField] private GameObject tpLocationList;
     [SerializeField] private float teleportTimer;
+    [SerializeField] private AudioSource bgmSource;
+    [SerializeField] private AudioClip chasingBgm;
+    [SerializeField] private AudioClip defaultBgm;
 
     private void Awake() 
     {
@@ -40,7 +45,9 @@ public class Witch : MonoBehaviour
         currentWaypoint = transform.position;
         lastKnownPosition = transform.position;
         wallCooldown = 0f;
+        chaseCooldown = 0f;
         teleportCooldown = teleportTimer;
+        playerWasSpotted = false;
 
         if (tpLocationList)
         {
@@ -60,12 +67,23 @@ public class Witch : MonoBehaviour
 
     public void AlertToPlayerPosition(Vector3 playerPos)
     {
+        if (!playerWasSpotted)
+        {
+            playerWasSpotted = true;
+            patrolState = PatrolState.Chasing;
+            ChangeSongs();
+            chaseCooldown = 10f;
+        }
         lastKnownPosition = playerPos;
-        patrolState = PatrolState.Chasing;
     }
 
     private void LookForPlayers(List<GameObject> objects)
     {
+        if (chaseCooldown > 0f)
+        {
+            chaseCooldown -= Time.deltaTime;
+        }
+
         if (objects.Count == 0)
         {
             // Debug.Log("No objects in sight!");
@@ -74,9 +92,11 @@ public class Witch : MonoBehaviour
                 // Move to last known position until either survivors are found or no survivors can be seen.
                 movePosition.SetMovePosition(lastKnownPosition);
 
-                if (IsNearPosition(lastKnownPosition))
+                if (IsNearPosition(lastKnownPosition) || chaseCooldown <= 0f)
                 {
                     patrolState = PatrolState.Patrolling;
+                    playerWasSpotted = false;
+                    ChangeSongs();
                 }
             }
             else if (patrolState == PatrolState.Patrolling)
@@ -85,9 +105,16 @@ public class Witch : MonoBehaviour
             }
 
         }
+        else if (!playerWasSpotted)
+        {
+            playerWasSpotted = true;
+            ChangeSongs();
+            patrolState = PatrolState.Chasing;
+
+        }
         else
         {
-            patrolState = PatrolState.Chasing;
+            chaseCooldown = 10f;
             lastKnownPosition = objects[objects.Count - 1].transform.position;
             movePosition.SetMovePosition(lastKnownPosition);
         }
@@ -129,7 +156,7 @@ public class Witch : MonoBehaviour
         if (IsNearPosition(currentWaypoint) || isTouchingWall)
         {
             // isTouchingWall = false;
-            if (isTouchingWall && wallCooldown > 0f)
+            if (wallCooldown > 0f)
             {
                 wallCooldown -= Time.deltaTime;
             }
@@ -242,6 +269,22 @@ public class Witch : MonoBehaviour
         {
             isTouchingWall = false;
         }
+    }
+
+    private void ChangeSongs()
+    {
+        bgmSource.Stop();
+
+        if (patrolState == PatrolState.Chasing)
+        {
+            bgmSource.clip = chasingBgm;
+        }
+        else
+        {
+            bgmSource.clip = defaultBgm;
+        }
+
+        bgmSource.Play();
     }
 }
 

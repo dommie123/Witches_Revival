@@ -12,9 +12,11 @@ public class Ghost : MonoBehaviour
     private bool isTouchingWall;
     private GameObject alertGraphic;
     private AudioSource alertSFX;
+    private Witch witch;
+    private float wallCooldown;
+    private bool playerWasSpotted;
 
     [SerializeField] private float patrolRange;
-    [SerializeField] private Witch witch;
 
     private void Awake() 
     {
@@ -24,6 +26,9 @@ public class Ghost : MonoBehaviour
         currentWaypoint = transform.position;
         alertGraphic = transform.Find("AlertGraphic").gameObject;
         alertSFX = GetComponent<AudioSource>();
+        witch = Object.FindObjectOfType<Witch>();
+        wallCooldown = 0f;
+        playerWasSpotted = false;
     }
 
     // Update is called once per frame
@@ -37,14 +42,16 @@ public class Ghost : MonoBehaviour
     {
         PatrolArea();
 
-        if (players.Count > 0)
+        if (players.Count > 0 && !playerWasSpotted)
         {
+            playerWasSpotted = true;
             alertGraphic.SetActive(true);
             alertSFX.Play();
             witch.AlertToPlayerPosition(players[players.Count - 1].transform.position);
         }
-        else
+        else if (players.Count == 0)
         {
+            playerWasSpotted = false;
             alertGraphic.SetActive(false);
         }
     }
@@ -53,9 +60,21 @@ public class Ghost : MonoBehaviour
     {        
         if (IsNearPosition(currentWaypoint) || isTouchingWall)
         {
-            isTouchingWall = false;
-            SetRandomDirection();
-            currentWaypoint = (lineOfSight.GetDirectionAsVector3() * patrolRange) + transform.position;
+            // isTouchingWall = false;
+            if (wallCooldown > 0f)
+            {
+                wallCooldown -= Time.deltaTime;
+            }
+            else if (isTouchingWall)
+            {
+                SetInvertedDirection(lineOfSight.GetDirection());
+                currentWaypoint = (lineOfSight.GetDirectionAsVector3() * patrolRange) + transform.position;
+            }
+            else
+            {
+                SetRandomDirection();
+                currentWaypoint = (lineOfSight.GetDirectionAsVector3() * patrolRange) + transform.position;
+            }
         }
 
         // Debug.Log(currentWaypoint);
@@ -83,6 +102,26 @@ public class Ghost : MonoBehaviour
         }
     }
 
+    private void SetInvertedDirection(LineOfSight.Direction currentDirection)
+    {
+        if (currentDirection == LineOfSight.Direction.Left)
+        {
+            lineOfSight.SetDirection(LineOfSight.Direction.Right);
+        }
+        else if (currentDirection == LineOfSight.Direction.Right)
+        {
+            lineOfSight.SetDirection(LineOfSight.Direction.Left);
+        }
+        else if (currentDirection == LineOfSight.Direction.Up)
+        {
+            lineOfSight.SetDirection(LineOfSight.Direction.Down);
+        }
+        else
+        {
+            lineOfSight.SetDirection(LineOfSight.Direction.Up);
+        }
+    }
+
     private bool IsNearPosition(Vector3 position)
     {
         // Debug.Log(Vector3.Distance(transform.position, position));
@@ -93,5 +132,10 @@ public class Ghost : MonoBehaviour
     {
         if (other.gameObject.tag == "Wall")
             isTouchingWall = true;
+    }
+
+    private void OnCollisionExit2D(Collision2D other) {
+        if (other.gameObject.tag == "Wall")
+            isTouchingWall = false;
     }
 }

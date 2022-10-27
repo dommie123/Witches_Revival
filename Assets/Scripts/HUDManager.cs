@@ -13,12 +13,14 @@ public class HUDManager : MonoBehaviour
 
     private Transform survivorSlot;
     private Transform informationPanel;
+    private Transform background;
 
     private void Awake() 
     {
         instance = this;
         survivorSlot = transform.Find("Info Panel").Find("Survivor Slot");
         informationPanel = transform.Find("Info Panel");
+        background = transform.Find("Info Panel").Find("Background");
         // GameManager.instance.HUDManagerIsAwake();
     }
 
@@ -31,7 +33,7 @@ public class HUDManager : MonoBehaviour
     {
         foreach (Transform child in informationPanel)
         {
-            if (child == survivorSlot || child == survivorsText.transform || child == doorIcon) continue;
+            if (child == survivorSlot || child == survivorsText.transform || child == doorIcon || child == background) continue;
             Destroy(child.gameObject);
         }
 
