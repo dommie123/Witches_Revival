@@ -77,6 +77,12 @@ public class Witch : MonoBehaviour
         lastKnownPosition = playerPos;
     }
 
+    public void AlertToPlayerPosition(Vector3 playerPos, Vector3 sourcePos)
+    {
+        AlertToPlayerPosition(playerPos);
+        TeleportToSetPosition(sourcePos);
+    }
+
     private void LookForPlayers(List<GameObject> objects)
     {
         if (chaseCooldown > 0f)
@@ -248,6 +254,11 @@ public class Witch : MonoBehaviour
         currentWaypoint = (lineOfSight.GetDirectionAsVector3() * patrolRange) + transform.position;
     }
 
+    private void TeleportToSetPosition(Vector3 position)
+    {
+        this.transform.position = position;
+    }
+
     private void OnCollisionEnter2D(Collision2D other) 
     {
         if (other.gameObject.tag == "Wall")
@@ -261,6 +272,10 @@ public class Witch : MonoBehaviour
             other.gameObject.GetComponent<Survivor>().KillSurvivor();
             OnKillPlayer?.Invoke(this, EventArgs.Empty);
         }
+        // else if (other.gameObject.tag == "Ghost")
+        // {
+        //     Physics2D.IgnoreCollison(GetComponent<Collider2D>(), other.gameObject.GetComponent<Collider2D>(), true);
+        // }
     }
 
     private void OnCollisionExit2D(Collision2D other) 

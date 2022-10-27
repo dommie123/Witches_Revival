@@ -56,6 +56,9 @@ TagManager:
   - name: Entity
     uniqueID: 3402534691
     locked: 0
+  - name: Particles
+    uniqueID: 3081951821
+    locked: 0
   - name: Selection Area
     uniqueID: 2285599507
     locked: 0

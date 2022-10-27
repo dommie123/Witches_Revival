@@ -47,7 +47,7 @@ public class Ghost : MonoBehaviour
             playerWasSpotted = true;
             alertGraphic.SetActive(true);
             alertSFX.Play();
-            witch.AlertToPlayerPosition(players[players.Count - 1].transform.position);
+            witch.AlertToPlayerPosition(players[players.Count - 1].transform.position, this.transform.position);
         }
         else if (players.Count == 0)
         {
@@ -132,6 +132,11 @@ public class Ghost : MonoBehaviour
     {
         if (other.gameObject.tag == "Wall")
             isTouchingWall = true;
+        else if (other.gameObject.tag == "Ghost" || other.gameObject.tag == "Witch")
+        {
+            // Physics2D.IgnoreCollison(GetComponent<Collider2D>(), other.gameObject.GetComponent<Collider2D>(), true);
+            SetRandomDirection();
+        }
     }
 
     private void OnCollisionExit2D(Collision2D other) {

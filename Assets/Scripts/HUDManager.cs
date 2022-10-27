@@ -21,7 +21,9 @@ public class HUDManager : MonoBehaviour
         survivorSlot = transform.Find("Info Panel").Find("Survivor Slot");
         informationPanel = transform.Find("Info Panel");
         background = transform.Find("Info Panel").Find("Background");
-        // GameManager.instance.HUDManagerIsAwake();
+
+        if (GameManager.instance)
+            GameManager.instance.HUDManagerIsAwake();
     }
 
     public void UpdateSurvivorText(int survivorsEscaped, int survivorsAlive)

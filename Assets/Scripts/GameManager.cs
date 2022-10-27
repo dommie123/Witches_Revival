@@ -56,7 +56,8 @@ public class GameManager : MonoBehaviour
             SpawnEnemies();
         }
 
-        HUDManager.instance.UpdateSurvivorText(numSurvivorsEscaped, numSurvivorsLeft);
+        if (HUDManager.instance)
+            HUDManager.instance.UpdateSurvivorText(numSurvivorsEscaped, numSurvivorsLeft);
     }
 
     private void OnEnable() 
