@@ -5,10 +5,9 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     public string levelOne;
-
-    public string howToPlay;
-
-    public string options;
+    public GameObject optionsPanel;
+    public GameObject instructionsPanel;
+    public GameObject mainMenuPanel;
 
     public void Play()
     {
@@ -17,12 +16,21 @@ public class MainMenu : MonoBehaviour
 
     public void HowToPlay()
     {
-        SceneManager.LoadScene(howToPlay);
+        mainMenuPanel.SetActive(false);
+        instructionsPanel.SetActive(true);
     }
 
     public void Options()
     {
-        SceneManager.LoadScene(options);
+        mainMenuPanel.SetActive(false);
+        optionsPanel.SetActive(true);
+    }
+
+    public void GoBack()
+    {
+        optionsPanel.SetActive(false);
+        instructionsPanel.SetActive(false);
+        mainMenuPanel.SetActive(true);
     }
 
     public void QuitGame()
